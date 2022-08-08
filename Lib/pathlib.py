@@ -587,7 +587,7 @@ class PurePath(object):
         """
         name = self.name
         i = name.rfind('.')
-        if 0 < i < len(name) - 1:
+        if name != '.' and i >= 0:
             return name[i:]
         else:
             return ''
@@ -600,9 +600,6 @@ class PurePath(object):
         These include the leading periods. For example: ['.tar', '.gz']
         """
         name = self.name
-        if name.endswith('.'):
-            return []
-        name = name.lstrip('.')
         return ['.' + suffix for suffix in name.split('.')[1:]]
 
     @property
@@ -638,7 +635,7 @@ class PurePath(object):
         f = self._flavour
         if f.sep in suffix or f.altsep and f.altsep in suffix:
             raise ValueError("Invalid suffix %r" % (suffix,))
-        if suffix and not suffix.startswith('.') or suffix == '.':
+        if suffix and not suffix.startswith('.'):
             raise ValueError("Invalid suffix %r" % (suffix))
         name = self.name
         if not name:
